@@ -158,8 +158,11 @@ font-weight:700; color: #111827; }
     </section>
   </div>
 
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
 <script>
-Kakao.init('실제_JavaScript_키');
+Kakao.init('cb69aadd8f94c482f8bc7a2ceb7204bd');
+
 async function generateRecipe() {
   const ingredients = document.getElementById('ingredients').value.trim();
   const cuisine = document.getElementById('cuisine').value;
@@ -171,7 +174,7 @@ async function generateRecipe() {
     return;
   }
 
-  result.textContent = 'AI가 레시피를 만드는 중입니다...';
+  result.textContent = 'AI가 레시피를 만들고 있습니다...';
 
   try {
     const response = await fetch('/api/recipe', {
@@ -181,7 +184,11 @@ async function generateRecipe() {
     });
 
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error || '오류가 발생했습니다.');
+
+    if (!response.ok) {
+      throw new Error(data.error || '오류가 발생했습니다.');
+    }
+
     result.textContent = data.recipe;
   } catch (error) {
     result.textContent = '오류: ' + error.message;
@@ -191,11 +198,14 @@ async function generateRecipe() {
 function speakRecipe() {
   const text = document.getElementById('result').textContent;
   if (!text || text.includes('재료를 입력')) return;
+
   window.speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'ko-KR';
   utterance.rate = 0.95;
   utterance.pitch = 1;
+
   window.speechSynthesis.speak(utterance);
 }
 
@@ -208,7 +218,7 @@ async function copyRecipe() {
   await navigator.clipboard.writeText(text);
   alert('레시피가 복사되었습니다.');
 }
-function shareKakao() {
+
 function shareKakao() {
   const recipe = document.getElementById('result').innerText;
 
