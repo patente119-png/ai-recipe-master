@@ -159,6 +159,7 @@ font-weight:700; color: #111827; }
   </div>
 
 <script>
+Kakao.init('실제_JavaScript_키');
 async function generateRecipe() {
   const ingredients = document.getElementById('ingredients').value.trim();
   const cuisine = document.getElementById('cuisine').value;
@@ -206,6 +207,36 @@ async function copyRecipe() {
   const text = document.getElementById('result').textContent;
   await navigator.clipboard.writeText(text);
   alert('레시피가 복사되었습니다.');
+}
+function shareKakao() {
+  const recipe = document.getElementById('result').innerText;
+
+  if (!recipe || recipe.includes('재료를 입력')) {
+    alert('먼저 레시피를 생성해 주세요.');
+    return;
+  }
+
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: 'AI 레시피 마스터',
+      description: recipe.substring(0, 150),
+      imageUrl: 'https://via.placeholder.com/300x200.png?text=AI+Recipe',
+      link: {
+        mobileWebUrl: 'https://ai-recipe-master.vercel.app',
+        webUrl: 'https://ai-recipe-master.vercel.app'
+      }
+    },
+    buttons: [
+      {
+        title: '레시피 보기',
+        link: {
+          mobileWebUrl: 'https://ai-recipe-master.vercel.app',
+          webUrl: 'https://ai-recipe-master.vercel.app'
+        }
+      }
+    ]
+  });
 }
 </script>
 </body>
