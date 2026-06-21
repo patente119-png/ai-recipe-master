@@ -69,7 +69,20 @@
       min-height: 160px;
     }
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-    .notice { font-size: 13px; color: #6b7280; line-height: 1.5; margin-top: 10px; }
+    .kakao-btn {
+  background: #FEE500;
+  color: #191919;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kakao-btn:hover {
+  opacity: 0.9;
+}
     @media (max-width: 640px) {
       h1 { font-size: 26px; }
       .grid, .actions { grid-template-columns: 1fr; }
@@ -116,13 +129,30 @@
       <h2>결과</h2>
       <div id="result">재료를 입력한 뒤 레시피 생성 버튼을 눌러 주세요.</div>
       <div class="actions">
-        <button class="secondary" onclick="speakRecipe()">🔊 듣기</button>
-        <button class="ghost" onclick="copyRecipe()">📋 복사</button>
-      </div>
-    </section>
-  </div>
+        <div class="actions">
+
+<button class="secondary" onclick="speakRecipe()">
+🔊 듣기
+</button>
+
+<button class="ghost" onclick="stopSpeaking()">
+■ 중지
+</button>
+
+<button class="ghost" onclick="copyRecipe()">
+📋 복사
+</button>
+
+<button class="kakao-btn" onclick="shareKakao()">
+💬 카카오톡 공유
+</button>
+
+</div>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
 <script>
+Kakao.init('cb69aadd8f94c482f8bc7a2ceb7204bd');
+
 async function generateRecipe() {
   const ingredients = document.getElementById('ingredients').value.trim();
   const cuisine = document.getElementById('cuisine').value;
@@ -166,6 +196,36 @@ async function copyRecipe() {
   const text = document.getElementById('result').textContent;
   await navigator.clipboard.writeText(text);
   alert('레시피가 복사되었습니다.');
+}
+function shareKakao() {
+  const recipe = document.getElementById('result').innerText;
+
+  if (!recipe || recipe.includes('재료를 입력')) {
+    alert('먼저 레시피를 생성해 주세요.');
+    return;
+  }
+
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: 'AI 레시피 마스터',
+      description: recipe.substring(0, 150),
+      imageUrl: 'https://via.placeholder.com/300x200.png?text=AI+Recipe',
+      link: {
+        mobileWebUrl: 'https://ai-recipe-master.vercel.app',
+        webUrl: 'https://ai-recipe-master.vercel.app'
+      }
+    },
+    buttons: [
+      {
+        title: '레시피 보기',
+        link: {
+          mobileWebUrl: 'https://ai-recipe-master.vercel.app',
+          webUrl: 'https://ai-recipe-master.vercel.app'
+        }
+      }
+    ]
+  });
 }
 </script>
 </body>
