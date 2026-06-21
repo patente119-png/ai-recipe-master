@@ -116,9 +116,12 @@
       <h2>결과</h2>
       <div id="result">재료를 입력한 뒤 레시피 생성 버튼을 눌러 주세요.</div>
       <div class="actions">
-        <button class="secondary" onclick="speakRecipe()">🔊 듣기</button>
-        <button class="ghost" onclick="copyRecipe()">📋 복사</button>
-      </div>
+  <button class="secondary" onclick="speakRecipe()">🔊 듣기</button>
+
+  <button class="ghost" onclick="stopSpeaking()">⏹ 중지</button>
+
+  <button class="ghost" onclick="copyRecipe()">📋 복사</button>
+</div>
     </section>
   </div>
 
@@ -160,6 +163,10 @@ function speakRecipe() {
   utterance.rate = 0.95;
   utterance.pitch = 1;
   window.speechSynthesis.speak(utterance);
+}
+
+function stopSpeaking() {
+  window.speechSynthesis.cancel();
 }
 
 async function copyRecipe() {
