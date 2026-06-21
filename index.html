@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: Arial, 'Noto Sans KR', sans-serif;
-      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
       color: #222;
     }
     .wrap {
@@ -18,21 +18,21 @@
       padding: 28px 16px 60px;
     }
     .hero {
-      background: #111827;
-      color: white;
-      border-radius: 24px;
-      padding: 28px 22px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.16);
-    }
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  color: white;
+  border-radius: 28px;
+  padding: 32px 24px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.18);
+}
     h1 { margin: 0 0 8px; font-size: 32px; }
     .sub { margin: 0; color: #fde68a; line-height: 1.5; }
-    .card {
-      margin-top: 18px;
-      background: white;
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-    }
+.card {
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  border: 1px solid #e5e7eb;
+}
     label { display: block; margin: 16px 0 8px; font-weight: 700; }
     textarea, select {
       width: 100%;
@@ -56,19 +56,32 @@
       font-weight: 800;
       cursor: pointer;
     }
-    .primary { width: 100%; margin-top: 18px; background: #f59e0b; color: #111827; }
-    .secondary { background: #111827; color: white; }
-    .ghost { background: #f3f4f6; color: #111827; }
-    #result {
-      white-space: pre-wrap;
-      line-height: 1.75;
-      background: #fffbeb;
-      border: 2px solid #fcd34d;
-      border-radius: 18px;
-      padding: 18px;
-      min-height: 160px;
-    }
-    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .primary { width: 100%; margin-top: 18px; background: linear-gradient(135deg,#f59e0b,#ea580c);
+color:white;
+font-weight:700; color: #111827; }
+    .secondary {
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  color: white;
+}
+    .ghost {
+  background: #f8fafc;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+}
+ #result {
+  background:#fffdf5;
+  border:2px solid #fbbf24;
+  border-radius:20px;
+  padding:20px;
+  line-height:1.8;
+  font-size:17px;
+}
+    .actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
     .notice { font-size: 13px; color: #6b7280; line-height: 1.5; margin-top: 10px; }
     @media (max-width: 640px) {
       h1 { font-size: 26px; }
