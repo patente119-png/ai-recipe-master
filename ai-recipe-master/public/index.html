@@ -9,30 +9,30 @@
     body {
       margin: 0;
       font-family: Arial, 'Noto Sans KR', sans-serif;
-      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
       color: #222;
     }
     .wrap {
-      max-width: 1000px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 28px 16px 60px;
     }
     .hero {
-      background: #111827;
-      color: white;
-      border-radius: 24px;
-      padding: 28px 22px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.16);
-    }
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  color: white;
+  border-radius: 28px;
+  padding: 32px 24px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.18);
+}
     h1 { margin: 0 0 8px; font-size: 32px; }
     .sub { margin: 0; color: #fde68a; line-height: 1.5; }
-    .card {
-      margin-top: 18px;
-      background: white;
-      border-radius: 22px;
-      padding: 28px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-    }
+.card {
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  border: 1px solid #e5e7eb;
+}
     label { display: block; margin: 16px 0 8px; font-weight: 700; }
     textarea, select {
       width: 100%;
@@ -56,51 +56,35 @@
       font-weight: 800;
       cursor: pointer;
     }
-    .primary { width: 100%; margin-top: 18px; background: #f59e0b; color: #111827; }
-    .secondary { background: #111827; color: white; }
-    .ghost { background: #f3f4f6; color: #111827; }
-    .kakao-btn {
-      background: #FEE500;
-      color: #191919;
-      border: none;
-      border-radius: 14px;
-      padding: 15px 16px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
+    .primary { width: 100%; margin-top: 18px; background: linear-gradient(135deg,#f59e0b,#ea580c);
+color:white;
+font-weight:700; color: #111827; }
+    .secondary {
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  color: white;
 }
-
-.kakao-btn:hover {
-  opacity: 0.9;
+    .ghost {
+  background: #f8fafc;
+  color: #111827;
+  border: 1px solid #e5e7eb;
 }
 #result {
-      white-space: pre-wrap;
-      line-height: 1.75;
-      background: #fffbeb;
-      border: 2px solid #fcd34d;
-      border-radius: 18px;
-      padding: 18px;
-      min-height: 240px;
-    }
-    .actions {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-}
-    .kakao-btn {
-  background: #FEE500;
-  color: #191919;
-  border: none;
-  border-radius: 14px;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-}
+  background:#fffdf5;
+  border:2px solid #fbbf24;
+  border-radius:20px;
+  padding:20px;
+  line-height:1.8;
+  font-size:17px;
 
-.kakao-btn:hover {
-  opacity: 0.9;
+  white-space: pre-wrap;
 }
+    .actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+    .notice { font-size: 13px; color: #6b7280; line-height: 1.5; margin-top: 10px; }
     @media (max-width: 640px) {
       h1 { font-size: 26px; }
       .grid, .actions { grid-template-columns: 1fr; }
@@ -147,30 +131,19 @@
       <h2>결과</h2>
       <div id="result">재료를 입력한 뒤 레시피 생성 버튼을 눌러 주세요.</div>
       <div class="actions">
-        <div class="actions">
+  <button class="secondary" onclick="speakRecipe()">🔊 듣기</button>
 
-<button class="secondary" onclick="speakRecipe()">
-🔊 듣기
-</button>
+  <button class="ghost" onclick="stopSpeaking()">⏹ 중지</button>
 
-<button class="ghost" onclick="stopSpeaking()">
-■ 중지
-</button>
-
-<button class="ghost" onclick="copyRecipe()">
-📋 복사
-</button>
-
-<button class="kakao-btn" onclick="shareKakao()">
-💬 카카오톡 공유
-</button>
-
-</div>
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+  <button class="ghost" onclick="copyRecipe()">📋 복사</button>
+  <button class="kakao-btn" onclick="shareKakao()">
+  💬 카카오톡 공유
+  </button>
+      </div>
+    </section>
+  </div>
 
 <script>
-Kakao.init('cb69aadd8f94c482f8bc7a2ceb7204bd');
-
 async function generateRecipe() {
   const ingredients = document.getElementById('ingredients').value.trim();
   const cuisine = document.getElementById('cuisine').value;
@@ -210,40 +183,14 @@ function speakRecipe() {
   window.speechSynthesis.speak(utterance);
 }
 
+function stopSpeaking() {
+  window.speechSynthesis.cancel();
+}
+
 async function copyRecipe() {
   const text = document.getElementById('result').textContent;
   await navigator.clipboard.writeText(text);
   alert('레시피가 복사되었습니다.');
-}
-function shareKakao() {
-  const recipe = document.getElementById('result').innerText;
-
-  if (!recipe || recipe.includes('재료를 입력')) {
-    alert('먼저 레시피를 생성해 주세요.');
-    return;
-  }
-
-  Kakao.Share.sendDefault({
-    objectType: 'feed',
-    content: {
-      title: 'AI 레시피 마스터',
-      description: recipe.substring(0, 150),
-      imageUrl: 'https://via.placeholder.com/300x200.png?text=AI+Recipe',
-      link: {
-        mobileWebUrl: 'https://ai-recipe-master.vercel.app',
-        webUrl: 'https://ai-recipe-master.vercel.app'
-      }
-    },
-    buttons: [
-      {
-        title: '레시피 보기',
-        link: {
-          mobileWebUrl: 'https://ai-recipe-master.vercel.app',
-          webUrl: 'https://ai-recipe-master.vercel.app'
-        }
-      }
-    ]
-  });
 }
 </script>
 </body>
