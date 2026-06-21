@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 레시피 마스터</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      color: #222;
+    }
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 28px 16px 60px;
+    }
+    .hero {
+      background: #111827;
+      color: white;
+      border-radius: 24px;
+      padding: 28px 22px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.16);
+    }
+    h1 { margin: 0 0 8px; font-size: 32px; }
+    .sub { margin: 0; color: #fde68a; line-height: 1.5; }
+    .card {
+      margin-top: 18px;
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+    label { display: block; margin: 16px 0 8px; font-weight: 700; }
+    textarea, select {
+      width: 100%;
+      border: 2px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+      background: #fff;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .primary { width: 100%; margin-top: 18px; background: #f59e0b; color: #111827; }
+    .secondary { background: #111827; color: white; }
+    .ghost { background: #f3f4f6; color: #111827; }
+    #result {
+      white-space: pre-wrap;
+      line-height: 1.75;
+      background: #fffbeb;
+      border: 2px solid #fcd34d;
+      border-radius: 18px;
+      padding: 18px;
+      min-height: 160px;
+    }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .notice { font-size: 13px; color: #6b7280; line-height: 1.5; margin-top: 10px; }
+    @media (max-width: 640px) {
+      h1 { font-size: 26px; }
+      .grid, .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>🍳 AI 레시피 마스터</h1>
+      <p class="sub">냉장고 재료를 입력하고 한식·중식·일식·양식 중 하나를 선택하면 AI가 집밥 레시피를 만들어 줍니다.</p>
+    </section>
+
+    <section class="card">
+      <label for="ingredients">재료 입력</label>
+      <textarea id="ingredients" placeholder="예: 계란 2개, 양파 반 개, 참치캔, 김치 조금"></textarea>
+
+      <div class="grid">
+        <div>
+          <label for="cuisine">요리 종류</label>
+          <select id="cuisine">
+            <option value="한식">🍚 한식</option>
+            <option value="중식">🥟 중식</option>
+            <option value="일식">🍣 일식</option>
+            <option value="양식">🍝 양식</option>
+          </select>
+        </div>
+        <div>
+          <label for="servings">인원수</label>
+          <select id="servings">
+            <option value="1인분">1인분</option>
+            <option value="2인분" selected>2인분</option>
+            <option value="3인분">3인분</option>
+            <option value="4인분">4인분</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="primary" onclick="generateRecipe()">AI 레시피 생성</button>
+      <p class="notice">※ 레시피는 참고용입니다. 알레르기, 질환, 식이 제한이 있으면 반드시 본인 상황에 맞게 조정하세요.</p>
+    </section>
+
+    <section class="card">
+      <h2>결과</h2>
+      <div id="result">재료를 입력한 뒤 레시피 생성 버튼을 눌러 주세요.</div>
+      <div class="actions">
+        <button class="secondary" onclick="speakRecipe()">🔊 듣기</button>
+        <button class="ghost" onclick="copyRecipe()">📋 복사</button>
+      </div>
+    </section>
+  </div>
+
+<script>
+async function generateRecipe() {
+  const ingredients = document.getElementById('ingredients').value.trim();
+  const cuisine = document.getElementById('cuisine').value;
+  const servings = document.getElementById('servings').value;
+  const result = document.getElementById('result');
+
+  if (!ingredients) {
+    alert('재료를 입력해 주세요.');
+    return;
+  }
+
+  result.textContent = 'AI가 레시피를 만드는 중입니다...';
+
+  try {
+    const response = await fetch('/api/recipe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ingredients, cuisine, servings })
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '오류가 발생했습니다.');
+    result.textContent = data.recipe;
+  } catch (error) {
+    result.textContent = '오류: ' + error.message;
+  }
+}
+
+function speakRecipe() {
+  const text = document.getElementById('result').textContent;
+  if (!text || text.includes('재료를 입력')) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'ko-KR';
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
+  window.speechSynthesis.speak(utterance);
+}
+
+async function copyRecipe() {
+  const text = document.getElementById('result').textContent;
+  await navigator.clipboard.writeText(text);
+  alert('레시피가 복사되었습니다.');
+}
+</script>
+</body>
+</html>
