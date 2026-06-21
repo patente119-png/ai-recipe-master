@@ -68,7 +68,21 @@ font-weight:700; color: #111827; }
   color: #111827;
   border: 1px solid #e5e7eb;
 }
-#result {
+.kakao-btn {
+  background: #FEE500 !important;
+  color: #191919 !important;
+  border: none;
+  border-radius: 14px;
+  padding: 15px 16px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kakao-btn:hover {
+  opacity: 0.9;
+}
+  #result {
   background:#fffdf5;
   border:2px solid #fbbf24;
   border-radius:20px;
@@ -136,6 +150,7 @@ font-weight:700; color: #111827; }
   <button class="ghost" onclick="stopSpeaking()">⏹ 중지</button>
 
   <button class="ghost" onclick="copyRecipe()">📋 복사</button>
+  
   <button class="kakao-btn" onclick="shareKakao()">
   💬 카카오톡 공유
   </button>
@@ -195,3 +210,4 @@ async function copyRecipe() {
 </script>
 </body>
 </html>
+
