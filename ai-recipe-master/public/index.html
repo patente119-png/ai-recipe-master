@@ -59,7 +59,21 @@
     .primary { width: 100%; margin-top: 18px; background: #f59e0b; color: #111827; }
     .secondary { background: #111827; color: white; }
     .ghost { background: #f3f4f6; color: #111827; }
-    #result {
+    .kakao-btn {
+      background: #FEE500;
+      color: #191919;
+      border: none;
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+}
+
+.kakao-btn:hover {
+  opacity: 0.9;
+}
+#result {
       white-space: pre-wrap;
       line-height: 1.75;
       background: #fffbeb;
@@ -68,7 +82,11 @@
       padding: 18px;
       min-height: 240px;
     }
-    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .actions {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
     .kakao-btn {
   background: #FEE500;
   color: #191919;
@@ -141,10 +159,6 @@
 
 <button class="ghost" onclick="copyRecipe()">
 📋 복사
-</button>
-
-<button class="kakao-btn" onclick="shareKakao()">
-💬 카카오톡 공유
 </button>
 
 <button class="kakao-btn" onclick="shareKakao()">
