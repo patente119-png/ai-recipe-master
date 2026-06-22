@@ -201,16 +201,14 @@ async function speakRecipe() {
   const text = document.getElementById('result').innerText;
 
   if (!text || text.includes('재료를 입력')) {
-    alert('먼저 레시피를 생성해 주세요.');
-    return;
-  }
+    
+const response = await fetch('/api/tts', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ text })
+});
 
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio = null;
-  }
-
-  const response = await fetch('/api/tts', {
+resultBox.innerText = originalText;', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text })
