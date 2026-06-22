@@ -195,22 +195,44 @@ async function generateRecipe() {
   }
 }
 
-function speakRecipe() {
-  const text = document.getElementById('result').textContent;
-  if (!text || text.includes('재료를 입력')) return;
+let currentAudio = null;
 
-  window.speechSynthesis.cancel();
+async function speakRecipe() {
+  const text = document.getElementById('result').innerText;
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ko-KR';
-  utterance.rate = 0.95;
-  utterance.pitch = 1;
+  if (!text || text.includes('재료를 입력')) {
+    alert('먼저 레시피를 생성해 주세요.');
+    return;
+  }
 
-  window.speechSynthesis.speak(utterance);
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+
+  const response = await fetch('/api/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text })
+  });
+
+  if (!response.ok) {
+    alert('음성 생성 중 오류가 발생했습니다.');
+    return;
+  }
+
+  const blob = await response.blob();
+  const audioUrl = URL.createObjectURL(blob);
+
+  currentAudio = new Audio(audioUrl);
+  currentAudio.play();
 }
 
 function stopSpeaking() {
-  window.speechSynthesis.cancel();
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
 }
 
 async function copyRecipe() {
