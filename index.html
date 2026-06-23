@@ -245,7 +245,7 @@ function shareKakao() {
   if (!recipe || recipe.includes('재료를 입력')) {
     alert('먼저 레시피를 생성해 주세요.');
     return;
-  }
+}
 
   Kakao.Share.sendDefault({
     objectType: 'feed',
