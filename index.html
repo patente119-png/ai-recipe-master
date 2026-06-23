@@ -240,8 +240,12 @@ async function copyRecipe() {
 }
 
 function shareKakao() {
-  const recipe = document.getElementById('result').innerText;
+  if (!window.Kakao || !Kakao.isInitialized()) {
+    alert('카카오 공유 준비 중입니다. 잠시 후 다시 눌러주세요.');
+    return;
+  }
 
+  const recipe = document.getElementById('result').innerText;
   if (!recipe || recipe.includes('재료를 입력')) {
     alert('먼저 레시피를 생성해 주세요.');
     return;
