@@ -160,8 +160,16 @@ font-weight:700; color: #111827; }
 
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
 <script>
-Kakao.init('cb69aadd8f94c482f8bc7a2ceb7204bd');
+window.addEventListener('load', function () {
+  if (window.Kakao && !Kakao.isInitialized()) {
+    Kakao.init('cb69aadd8f94c482f8bc7a2ceb7204bd');
+  }
+});
+
+let currentAudio = null;
 
 async function generateRecipe() {
   const ingredients = document.getElementById('ingredients').value.trim();
@@ -195,24 +203,31 @@ async function generateRecipe() {
   }
 }
 
-let currentAudio = null;
-
 async function speakRecipe() {
   const text = document.getElementById('result').innerText;
 
   if (!text || text.includes('재료를 입력')) {
-    
-const response = await fetch('/api/tts', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ text })
-});
+    alert('먼저 레시피를 생성해 주세요.');
+    return;
+  }
 
-resultBox.innerText = originalText;', {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+
+  const resultBox = document.getElementById('result');
+  const originalText = resultBox.innerText;
+
+  resultBox.innerText = originalText + '\n\n🔊 음성을 생성 중입니다. 약 5~10초만 기다려 주세요.';
+
+  const response = await fetch('/api/tts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text })
   });
+
+  resultBox.innerText = originalText;
 
   if (!response.ok) {
     alert('음성 생성 중 오류가 발생했습니다.');
@@ -223,7 +238,10 @@ resultBox.innerText = originalText;', {
   const audioUrl = URL.createObjectURL(blob);
 
   currentAudio = new Audio(audioUrl);
-  currentAudio.play();
+  currentAudio.play().catch(function (error) {
+    alert('음성 재생이 차단되었습니다. 다시 듣기 버튼을 눌러주세요.');
+    console.error(error);
+  });
 }
 
 function stopSpeaking() {
@@ -246,10 +264,11 @@ function shareKakao() {
   }
 
   const recipe = document.getElementById('result').innerText;
+
   if (!recipe || recipe.includes('재료를 입력')) {
     alert('먼저 레시피를 생성해 주세요.');
     return;
-}
+  }
 
   Kakao.Share.sendDefault({
     objectType: 'feed',
@@ -258,16 +277,16 @@ function shareKakao() {
       description: recipe.substring(0, 150),
       imageUrl: 'https://via.placeholder.com/300x200.png?text=AI+Recipe',
       link: {
-        mobileWebUrl: 'https://ai-recipe-master.vercel.app',
-        webUrl: 'https://ai-recipe-master.vercel.app'
+        mobileWebUrl: location.origin,
+        webUrl: location.origin
       }
     },
     buttons: [
       {
         title: '레시피 보기',
         link: {
-          mobileWebUrl: 'https://ai-recipe-master.vercel.app',
-          webUrl: 'https://ai-recipe-master.vercel.app'
+          mobileWebUrl: location.origin,
+          webUrl: location.origin
         }
       }
     ]
