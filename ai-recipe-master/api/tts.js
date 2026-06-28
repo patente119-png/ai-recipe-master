@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       },
 body: JSON.stringify({
   model: "gpt-4o-mini-tts",
-  voice: "shimmer",
+  voice: "echo",
   input: text,
   instructions: "귀엽고 상냥한 어린 여자아이처럼 자연스럽게 읽어주세요. 말은 천천히 또박또박, 밝고 따뜻한 목소리로 요리를 함께 만드는 친구처럼 설명해주세요."
 })
