@@ -18,9 +18,9 @@ export default async function handler(req, res) {
       },
 body: JSON.stringify({
   model: "gpt-4o-mini-tts",
-  voice: "shimmer",
+  voice: "nova",
   input: text,
-  instructions: "맑고 부드러운 여성 목소리로 자연스럽게 읽어주세요. 말은 천천히 또박또박 하고, 친절한 요리 선생님처럼 따뜻하고 편안하게 설명해주세요. 중요한 재료와 조리 순서는 조금 더 또렷하게 강조해서 읽어주세요."
+  instructions: "처음부터 끝까지 부드럽고 자연스러운 성인 여성 목소리로 읽어주세요. 낮은 남성 톤이 섞이지 않게, 맑고 따뜻한 여성 요리 선생님처럼 천천히 또박또박 설명해주세요."
 })
     });
 
