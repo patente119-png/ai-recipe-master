@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
+body: JSON.stringify({
   model: "gpt-4o-mini-tts",
   voice: "shimmer",
   input: text,
